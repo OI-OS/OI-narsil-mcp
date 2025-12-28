@@ -18,6 +18,24 @@ narsil-mcp supports flexible configuration through multiple layers, allowing you
 
 ## Quick Start
 
+### Neural API Key Setup
+
+If you want to use neural embeddings for advanced code similarity search, run the interactive wizard:
+
+```bash
+# Run the neural API key setup wizard
+narsil-mcp config init --neural
+```
+
+The wizard will:
+1. Detect your editor (Claude Desktop, Claude Code, Zed, VS Code, JetBrains)
+2. Prompt for your API provider (Voyage AI recommended for code, or OpenAI)
+3. Ask for your API key
+4. Optionally validate the key
+5. Automatically add the key to your editor's MCP config file
+
+After completing the wizard, restart your editor and run narsil-mcp with `--neural` to enable neural search.
+
 ### Using Presets
 
 The fastest way to get started is using a preset:

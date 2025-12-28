@@ -41,6 +41,10 @@ pub enum ConfigCommand {
         /// Create user config (~/.config/narsil-mcp/config.yaml)
         #[arg(long)]
         user: bool,
+
+        /// Run the neural API key setup wizard
+        #[arg(long)]
+        neural: bool,
     },
 
     /// Apply a preset to configuration
@@ -108,7 +112,7 @@ pub enum OutputFormat {
 }
 
 /// Handle config subcommands
-pub fn handle_config_command(cmd: ConfigCommand) -> Result<()> {
+pub async fn handle_config_command(cmd: ConfigCommand) -> Result<()> {
     match cmd {
         ConfigCommand::Show { format, repo } => cmd_show(format, repo),
         ConfigCommand::Validate { path, verbose } => cmd_validate(path, verbose),
@@ -116,7 +120,8 @@ pub fn handle_config_command(cmd: ConfigCommand) -> Result<()> {
             preset,
             project,
             user,
-        } => cmd_init(preset, project, user),
+            neural,
+        } => cmd_init(preset, project, user, neural).await,
         ConfigCommand::Preset { preset, project } => cmd_preset(preset, project),
         ConfigCommand::Export { resolved, format } => cmd_export(resolved, format),
     }
@@ -226,7 +231,13 @@ fn cmd_validate(path: PathBuf, verbose: bool) -> Result<()> {
     }
 }
 
-fn cmd_init(preset: Option<String>, project: bool, user: bool) -> Result<()> {
+async fn cmd_init(preset: Option<String>, project: bool, user: bool, neural: bool) -> Result<()> {
+    // If --neural flag is set, run the neural API key wizard instead
+    if neural {
+        use crate::config::wizard::NeuralWizard;
+        let wizard = NeuralWizard::new();
+        return wizard.run().await;
+    }
     // Determine target path
     let target_path = if project {
         PathBuf::from(".narsil.yaml")

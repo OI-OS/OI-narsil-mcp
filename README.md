@@ -182,7 +182,20 @@ narsil-mcp \
   --neural-model voyage-code-2  # Model to use
 ```
 
-**Note:** Neural embeddings require an API key (or custom endpoint). Set one of:
+**Note:** Neural embeddings require an API key (or custom endpoint). The easiest way to set this up is with the interactive wizard:
+
+```bash
+# Run the neural API key setup wizard
+narsil-mcp config init --neural
+```
+
+The wizard will:
+- Detect your editor (Claude Desktop, Claude Code, Zed, VS Code, JetBrains)
+- Prompt for your API provider (Voyage AI, OpenAI, or custom)
+- Validate your API key
+- Automatically add it to your editor's MCP config
+
+Alternatively, you can manually set one of these environment variables:
 - `EMBEDDING_API_KEY` - Generic API key for any provider
 - `VOYAGE_API_KEY` - Voyage AI specific API key
 - `OPENAI_API_KEY` - OpenAI specific API key

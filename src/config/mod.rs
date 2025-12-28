@@ -19,6 +19,7 @@ pub mod loader;
 pub mod preset;
 pub mod schema;
 pub mod validation;
+pub mod wizard;
 
 // Re-export main types used by other modules and tests
 pub use cli::{handle_config_command, handle_tools_command, ConfigCommand, ToolsCommand};

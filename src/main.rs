@@ -144,7 +144,7 @@ async fn main() -> Result<()> {
     if let Some(command) = args.command {
         // For subcommands, we don't need logging to stderr
         return match command {
-            Commands::Config(config_cmd) => config::handle_config_command(config_cmd),
+            Commands::Config(config_cmd) => config::handle_config_command(config_cmd).await,
             Commands::Tools(tools_cmd) => config::handle_tools_command(tools_cmd),
         };
     }

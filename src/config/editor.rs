@@ -3,6 +3,160 @@
 /// Maps MCP client names to appropriate tool presets based on editor capabilities
 /// and performance characteristics.
 use super::preset::Preset;
+use std::fmt;
+use std::path::PathBuf;
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum EditorType {
+    ClaudeDesktop,
+    ClaudeCode,
+    Zed,
+    VSCode,
+    JetBrains,
+}
+
+impl fmt::Display for EditorType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            EditorType::ClaudeDesktop => write!(f, "Claude Desktop"),
+            EditorType::ClaudeCode => write!(f, "Claude Code"),
+            EditorType::Zed => write!(f, "Zed"),
+            EditorType::VSCode => write!(f, "VS Code"),
+            EditorType::JetBrains => write!(f, "JetBrains IDEs"),
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct EditorConfig {
+    pub editor_type: EditorType,
+    pub config_path: PathBuf,
+    pub exists: bool,
+}
+
+/// Get the config file path for a specific editor
+pub fn get_editor_config_path(editor: EditorType) -> PathBuf {
+    match editor {
+        EditorType::ClaudeDesktop => get_claude_desktop_config_path(),
+        EditorType::ClaudeCode => get_claude_code_config_path(),
+        EditorType::Zed => get_zed_config_path(),
+        EditorType::VSCode => get_vscode_config_path(),
+        EditorType::JetBrains => get_jetbrains_config_path(),
+    }
+}
+
+/// Detect which editors have config files on this system
+pub fn detect_available_editors() -> Vec<EditorConfig> {
+    let mut editors = Vec::new();
+
+    for editor_type in [
+        EditorType::ClaudeDesktop,
+        EditorType::ClaudeCode,
+        EditorType::Zed,
+        EditorType::VSCode,
+        EditorType::JetBrains,
+    ] {
+        let config_path = get_editor_config_path(editor_type);
+        let exists = config_path.exists();
+
+        editors.push(EditorConfig {
+            editor_type,
+            config_path,
+            exists,
+        });
+    }
+
+    editors
+}
+
+fn get_claude_desktop_config_path() -> PathBuf {
+    #[cfg(target_os = "macos")]
+    {
+        if let Some(home) = std::env::var_os("HOME") {
+            PathBuf::from(home)
+                .join("Library")
+                .join("Application Support")
+                .join("Claude")
+                .join("claude_desktop_config.json")
+        } else {
+            PathBuf::from("claude_desktop_config.json")
+        }
+    }
+
+    #[cfg(target_os = "windows")]
+    {
+        use directories::ProjectDirs;
+        if let Some(proj_dirs) = ProjectDirs::from("com", "Anthropic", "Claude") {
+            proj_dirs.config_dir().join("claude_desktop_config.json")
+        } else {
+            PathBuf::from("claude_desktop_config.json")
+        }
+    }
+
+    #[cfg(not(any(target_os = "macos", target_os = "windows")))]
+    {
+        use directories::ProjectDirs;
+        if let Some(proj_dirs) = ProjectDirs::from("com", "Anthropic", "Claude") {
+            proj_dirs.config_dir().join("claude_desktop_config.json")
+        } else if let Some(home) = std::env::var_os("HOME") {
+            PathBuf::from(home)
+                .join(".config")
+                .join("Claude")
+                .join("claude_desktop_config.json")
+        } else {
+            PathBuf::from("claude_desktop_config.json")
+        }
+    }
+}
+
+fn get_claude_code_config_path() -> PathBuf {
+    if let Some(home) = std::env::var_os("HOME") {
+        PathBuf::from(home)
+            .join(".claude")
+            .join("claude_code_config.json")
+    } else {
+        PathBuf::from("claude_code_config.json")
+    }
+}
+
+fn get_zed_config_path() -> PathBuf {
+    #[cfg(target_os = "windows")]
+    {
+        use directories::ProjectDirs;
+        if let Some(proj_dirs) = ProjectDirs::from("dev", "zed", "Zed") {
+            proj_dirs.config_dir().join("settings.json")
+        } else {
+            PathBuf::from("settings.json")
+        }
+    }
+
+    #[cfg(not(target_os = "windows"))]
+    {
+        // Zed uses ~/.config/zed on Unix-like systems
+        if let Some(home) = std::env::var_os("HOME") {
+            PathBuf::from(home)
+                .join(".config")
+                .join("zed")
+                .join("settings.json")
+        } else {
+            PathBuf::from("settings.json")
+        }
+    }
+}
+
+fn get_vscode_config_path() -> PathBuf {
+    std::env::current_dir()
+        .unwrap()
+        .join(".vscode")
+        .join("mcp.json")
+}
+
+fn get_jetbrains_config_path() -> PathBuf {
+    std::env::current_dir()
+        .unwrap()
+        .join(".idea")
+        .join("mcp.json")
+}
 
 /// Map an editor name to a preset
 ///
