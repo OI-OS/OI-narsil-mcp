@@ -164,7 +164,7 @@ async fn main() -> Result<()> {
         .finish();
     tracing::subscriber::set_global_default(subscriber)?;
 
-    info!("Starting narsil-mcp v1.0.0");
+    info!("Starting narsil-mcp v{}", env!("CARGO_PKG_VERSION"));
 
     // Handle repository discovery if requested
     let mut repos = server_args.repos;

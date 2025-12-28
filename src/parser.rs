@@ -80,7 +80,7 @@ impl LanguageParser {
                 extensions: vec!["ts"],
                 symbol_query: r#"
                     (function_declaration name: (identifier) @function.name) @function.def
-                    (class_declaration name: (identifier) @class.name) @class.def
+                    (class_declaration name: (type_identifier) @class.name) @class.def
                     (method_definition name: (property_identifier) @method.name) @method.def
                     (interface_declaration name: (type_identifier) @interface.name) @interface.def
                     (type_alias_declaration name: (type_identifier) @type.name) @type.def
@@ -94,7 +94,7 @@ impl LanguageParser {
                 extensions: vec!["tsx"],
                 symbol_query: r#"
                     (function_declaration name: (identifier) @function.name) @function.def
-                    (class_declaration name: (identifier) @class.name) @class.def
+                    (class_declaration name: (type_identifier) @class.name) @class.def
                     (method_definition name: (property_identifier) @method.name) @method.def
                     (interface_declaration name: (type_identifier) @interface.name) @interface.def
                     (type_alias_declaration name: (type_identifier) @type.name) @type.def
@@ -196,7 +196,6 @@ impl LanguageParser {
                     (function_declaration (simple_identifier) @function.name) @function.def
                     (class_declaration (type_identifier) @class.name) @class.def
                     (object_declaration (type_identifier) @class.name) @class.def
-                    (interface_declaration (type_identifier) @interface.name) @interface.def
                 "#,
             },
             // PHP

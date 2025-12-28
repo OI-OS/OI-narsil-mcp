@@ -183,7 +183,10 @@ impl CodeIntelEngine {
                     Some(Arc::new(engine))
                 }
                 Err(e) => {
-                    warn!("Failed to initialize neural engine: {}", e);
+                    warn!(
+                        "Failed to initialize neural engine: {}. Run 'narsil-mcp config init --neural' to set up your API key.",
+                        e
+                    );
                     None
                 }
             }
