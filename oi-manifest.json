@@ -1,0 +1,252 @@
+{
+  "server_name": "OI-narsil-mcp",
+  "version": "1.1.4",
+  "intents": [
+    {
+      "keyword": "narsil status",
+      "tool_name": "get_index_status",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil structure",
+      "tool_name": "get_project_structure",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil symbols",
+      "tool_name": "find_symbols",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil search",
+      "tool_name": "search_code",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil semantic",
+      "tool_name": "semantic_search",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil hybrid",
+      "tool_name": "hybrid_search",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil definition",
+      "tool_name": "go_to_definition",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil usages",
+      "tool_name": "find_symbol_usages",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil references",
+      "tool_name": "find_references",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil security",
+      "tool_name": "get_security_summary",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil owasp",
+      "tool_name": "check_owasp_top10",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil cwe",
+      "tool_name": "check_cwe_top25",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil injection",
+      "tool_name": "find_injection_vulnerabilities",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil dependencies",
+      "tool_name": "check_dependencies",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil sbom",
+      "tool_name": "generate_sbom",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil licenses",
+      "tool_name": "check_licenses",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil dead code",
+      "tool_name": "find_dead_code",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil circular",
+      "tool_name": "find_circular_imports",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil type errors",
+      "tool_name": "check_type_errors",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil infer types",
+      "tool_name": "infer_types",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil call graph",
+      "tool_name": "get_code_graph",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil import graph",
+      "tool_name": "get_import_graph",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil data flow",
+      "tool_name": "get_data_flow",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil control flow",
+      "tool_name": "get_control_flow",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil metrics",
+      "tool_name": "get_metrics",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil repos",
+      "tool_name": "list_repos",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil file",
+      "tool_name": "get_file",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil excerpt",
+      "tool_name": "get_excerpt",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil similar",
+      "tool_name": "find_similar_code",
+      "priority": 10
+    },
+    {
+      "keyword": "narsil duplicate",
+      "tool_name": "find_similar_code",
+      "priority": 10
+    }
+  ],
+  "parameter_extractors": {
+    "search_code": {
+      "OI-narsil-mcp::search_code.query": "remove:search,find,code,for,with,the,a,an",
+      "OI-narsil-mcp::search_code.limit": "regex:(?:limit|max|results?)[\\s:]+(\\d+)|default:10",
+      "OI-narsil-mcp::search_code.language": "regex:(?:in|language|lang)[\\s:]+(\\w+)"
+    },
+    "semantic_search": {
+      "OI-narsil-mcp::semantic_search.query": "remove:semantic,search,find,for,with,the,a,an",
+      "OI-narsil-mcp::semantic_search.limit": "regex:(?:limit|max|results?)[\\s:]+(\\d+)|default:10"
+    },
+    "hybrid_search": {
+      "OI-narsil-mcp::hybrid_search.query": "remove:hybrid,search,find,for,with,the,a,an",
+      "OI-narsil-mcp::hybrid_search.limit": "regex:(?:limit|max|results?)[\\s:]+(\\d+)|default:10"
+    },
+    "find_symbols": {
+      "OI-narsil-mcp::find_symbols.pattern": "regex:(?:pattern|name|symbol)[\\s:]+([\\w.]+)|default:.*",
+      "OI-narsil-mcp::find_symbols.symbol_type": "regex:(?:type|kind)[\\s:]+(function|class|struct|enum|interface|method|variable)"
+    },
+    "go_to_definition": {
+      "OI-narsil-mcp::go_to_definition.symbol": "regex:(?:symbol|name|definition)[\\s:]+([\\w.]+)",
+      "OI-narsil-mcp::go_to_definition.file": "regex:(?:file|path)[\\s:]+([\\w./-]+)",
+      "OI-narsil-mcp::go_to_definition.line": "regex:(?:line|row)[\\s:]+(\\d+)"
+    },
+    "find_symbol_usages": {
+      "OI-narsil-mcp::find_symbol_usages.symbol": "regex:(?:symbol|name|usages?)[\\s:]+([\\w.]+)"
+    },
+    "find_references": {
+      "OI-narsil-mcp::find_references.symbol": "regex:(?:symbol|name|references?)[\\s:]+([\\w.]+)"
+    },
+    "check_owasp_top10": {
+      "OI-narsil-mcp::check_owasp_top10.repo": "regex:(?:repo|repository|path)[\\s:]+([\\w./-]+)|default:."
+    },
+    "check_cwe_top25": {
+      "OI-narsil-mcp::check_cwe_top25.repo": "regex:(?:repo|repository|path)[\\s:]+([\\w./-]+)|default:."
+    },
+    "find_injection_vulnerabilities": {
+      "OI-narsil-mcp::find_injection_vulnerabilities.repo": "regex:(?:repo|repository|path)[\\s:]+([\\w./-]+)|default:."
+    },
+    "check_dependencies": {
+      "OI-narsil-mcp::check_dependencies.repo": "regex:(?:repo|repository|path)[\\s:]+([\\w./-]+)|default:."
+    },
+    "generate_sbom": {
+      "OI-narsil-mcp::generate_sbom.repo": "regex:(?:repo|repository|path)[\\s:]+([\\w./-]+)|default:.",
+      "OI-narsil-mcp::generate_sbom.format": "regex:(?:format|type)[\\s:]+(cyclonedx|spdx|json)|default:cyclonedx"
+    },
+    "check_licenses": {
+      "OI-narsil-mcp::check_licenses.repo": "regex:(?:repo|repository|path)[\\s:]+([\\w./-]+)|default:."
+    },
+    "find_dead_code": {
+      "OI-narsil-mcp::find_dead_code.file": "regex:(?:file|path)[\\s:]+([\\w./-]+)"
+    },
+    "find_circular_imports": {
+      "OI-narsil-mcp::find_circular_imports.repo": "regex:(?:repo|repository|path)[\\s:]+([\\w./-]+)|default:."
+    },
+    "get_project_structure": {
+      "OI-narsil-mcp::get_project_structure.repo": "regex:(?:repo|repository|path)[\\s:]+([\\w./-]+)|default:."
+    },
+    "check_type_errors": {
+      "OI-narsil-mcp::check_type_errors.file": "regex:(?:file|path)[\\s:]+([\\w./-]+)"
+    },
+    "infer_types": {
+      "OI-narsil-mcp::infer_types.file": "regex:(?:file|path)[\\s:]+([\\w./-]+)",
+      "OI-narsil-mcp::infer_types.function": "regex:(?:function|fn|method)[\\s:]+([\\w.]+)"
+    },
+    "get_code_graph": {
+      "OI-narsil-mcp::get_code_graph.repo": "regex:(?:repo|repository|path)[\\s:]+([\\w./-]+)|default:."
+    },
+    "get_import_graph": {
+      "OI-narsil-mcp::get_import_graph.repo": "regex:(?:repo|repository|path)[\\s:]+([\\w./-]+)|default:."
+    },
+    "get_data_flow": {
+      "OI-narsil-mcp::get_data_flow.file": "regex:(?:file|path)[\\s:]+([\\w./-]+)",
+      "OI-narsil-mcp::get_data_flow.function": "regex:(?:function|fn|method)[\\s:]+([\\w.]+)"
+    },
+    "get_control_flow": {
+      "OI-narsil-mcp::get_control_flow.file": "regex:(?:file|path)[\\s:]+([\\w./-]+)",
+      "OI-narsil-mcp::get_control_flow.function": "regex:(?:function|fn|method)[\\s:]+([\\w.]+)"
+    },
+    "find_similar_code": {
+      "OI-narsil-mcp::find_similar_code.code": "remove:find,similar,code,duplicate,for,with,the,a,an",
+      "OI-narsil-mcp::find_similar_code.limit": "regex:(?:limit|max|results?)[\\s:]+(\\d+)|default:10"
+    },
+    "get_file": {
+      "OI-narsil-mcp::get_file.path": "regex:(?:file|path)[\\s:]+([\\w./-]+)",
+      "OI-narsil-mcp::get_file.start_line": "regex:(?:start|from|line)[\\s:]+(\\d+)",
+      "OI-narsil-mcp::get_file.end_line": "regex:(?:end|to|line)[\\s:]+(\\d+)"
+    },
+    "get_excerpt": {
+      "OI-narsil-mcp::get_excerpt.file": "regex:(?:file|path)[\\s:]+([\\w./-]+)",
+      "OI-narsil-mcp::get_excerpt.line": "regex:(?:line|row)[\\s:]+(\\d+)",
+      "OI-narsil-mcp::get_excerpt.context_lines": "regex:(?:context|lines)[\\s:]+(\\d+)|default:5"
+    }
+  },
+  "reminder_message": "OI-narsil-mcp is a Rust-powered MCP server providing AI assistants with deep code understanding through 76 specialized tools. Supports 16 languages, security scanning, call graphs, dependency analysis, and more.",
+  "post_install_instructions": "After installation, the repository must be indexed before use. Run: ./MCP-servers/OI-narsil-mcp/target/release/narsil-mcp --repos . --reindex --persist --verbose from the OI project root. This indexes the codebase (10,498 files, 388,443 symbols) and saves the index to ~/.cache/narsil-mcp for fast subsequent startups. Indexing takes 5-15 minutes for large repositories. See INDEXING-GUIDE.md for detailed instructions. After indexing, use commands like: oi \"narsil security\", oi \"narsil structure\", oi \"narsil dependencies\" to access code intelligence features."
+}
+
